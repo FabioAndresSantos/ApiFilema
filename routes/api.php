@@ -24,10 +24,15 @@ Route::group([
     'prefix' => 'auth'
 
 ], function ($router) {
-
+    //rutas para acceder desde y realizar acciones necesarias para el login 
+    //se loguea y crea el token del user
     Route::post('login', 'App\Http\Controllers\AuthController@login');
+    //se desloguea y vence el token 
     Route::post('logout', 'App\Http\Controllers\AuthController@logout');
+    //refresca el token
     Route::post('refresh', 'App\Http\Controllers\AuthController@refresh');
+    //trae toda la informacion del user
     Route::post('datosUser', 'App\Http\Controllers\AuthController@datosUser');
+    //permite crear un nuevo usuario
     Route::post('registro', 'App\Http\Controllers\AuthController@register');
 });
