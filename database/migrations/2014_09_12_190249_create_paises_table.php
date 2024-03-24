@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Paises;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,6 +17,9 @@ return new class extends Migration
             $table->string('nombre');
             $table->timestamps();
         });
+        Paises::create(['nombre' => 'Argentina']);
+        Paises::create(['nombre' => 'Brasil']);
+        Paises::create(['nombre' => 'Colombia']);
     }
 
     /**

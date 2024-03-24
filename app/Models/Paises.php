@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 
 class Paises extends Model
 {
+    protected $fillable = [
+        'nombre',
+    ];
+
     use HasFactory;
 
     // Relación: Un país tiene muchas ciudades
