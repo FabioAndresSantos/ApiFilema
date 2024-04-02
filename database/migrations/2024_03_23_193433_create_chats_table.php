@@ -13,12 +13,14 @@ return new class extends Migration
     {
         Schema::create('chats', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('usuario1_id');
-            $table->unsignedBigInteger('usuario2_id');
-            $table->foreign('usuario1_id')->references('id')->on('users');
-            $table->foreign('usuario2_id')->references('id')->on('users');
-            $table->unsignedBigInteger('tipoChat');
-            $table->foreign('tipoChat')->references('id')->on('tipochat');
+            $table->unsignedBigInteger('remitente_id');
+            $table->foreign('remitente_id')->references('id')->on('users');
+            $table->unsignedBigInteger('destinatario_id');
+            $table->foreign('destinatario_id')->references('id')->on('users');
+            $table->text('mensaje');
+            $table->dateTime('fechaHoraMensaje');
+            $table->string('tipoChat');
+            $table->boolean('activo')->default(true);
             $table->timestamps();
         });
     }

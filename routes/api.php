@@ -2,7 +2,6 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ChatController; 
 
 /*
 |--------------------------------------------------------------------------
@@ -36,10 +35,4 @@ Route::group([
     Route::post('datosUser', 'App\Http\Controllers\AuthController@datosUser');
     //permite crear un nuevo usuario
     Route::post('registro', 'App\Http\Controllers\AuthController@register');
-    
 });
-
-Route::get('/mensajeChat',[ChatController::class, 'getMensajesChat']);
-Route::get('/mensajesFinal',[ChatController::class, 'getChat']); 
-Route::get('/mensajesAll',[ChatController::class, 'getAllChat']); 
-Route::post('/envioMensajes',[ChatController::class, 'sendMensajes']); 
