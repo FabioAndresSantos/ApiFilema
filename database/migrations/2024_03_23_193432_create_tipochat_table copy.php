@@ -11,9 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('categorias_intereses', function (Blueprint $table) {
+        Schema::create('tipochat', function (Blueprint $table) {
             $table->id();
-            $table->string('nombre_categoria');
+            $table->string('tipo');
             $table->timestamps();
         });
     }
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('categorias_intereses');
+        Schema::dropIfExists('tipochat');
     }
 };
