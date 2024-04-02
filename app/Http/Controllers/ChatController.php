@@ -124,6 +124,7 @@ class ChatController extends Controller{
             'mensaje'=>$mensaje,
             'chat'=>$chat
         ]); 
+        
     }
 
 }
