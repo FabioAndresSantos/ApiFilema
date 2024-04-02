@@ -12,7 +12,7 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/math.git",
-                "reference": "0ad82ce168c82ba30d1c01ec86116ab52f589478"
+                "reference": "0ad82ce168c82ba30d1c01ec86116ab52f589478" 
             },
             "dist": {
                 "type": "zip",
