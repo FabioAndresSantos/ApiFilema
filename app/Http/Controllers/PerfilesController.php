@@ -86,6 +86,24 @@ public function upsertPerfil(Request $request)
             $perfil->foto_perfil = "pictures/" . $picture;
         }
 
+
+        // Actualizar la descripción del perfil
+        $perfil->descripcion = $request->descripcion;
+        $perfil->save();
+
+        $data = [
+            "foto_perfil"=> $perfil->foto_perfil,
+            "descripcion"=> $perfil->descripcion
+        ];
+
+        return response()->json($data, $perfil->wasRecentlyCreated ? 201 : 200);
+    } catch (\Exception $e) {
+        Log::error('Error al crear o actualizar el perfil: ' . $e->getMessage());
+
+        // Devolver una respuesta de error 500
+        return response()->json(['error' => 'Error interno del servidor'], 500);
+
+
         // Actualizar la descripción del perfil
         $perfil->descripcion = $request->descripcion;
         $perfil->save();
@@ -103,6 +121,8 @@ public function upsertPerfil(Request $request)
         return response()->json(['error' => 'Error interno del servidor'], 500);
     }
 }
+
+
 
     public function searchFriendship(Request $request){
 
