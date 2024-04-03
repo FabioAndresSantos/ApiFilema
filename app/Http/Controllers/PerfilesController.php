@@ -86,6 +86,24 @@ public function upsertPerfil(Request $request)
             $perfil->foto_perfil = "pictures/" . $picture;
         }
 
+
+        // Actualizar la descripción del perfil
+        $perfil->descripcion = $request->descripcion;
+        $perfil->save();
+
+        $data = [
+            "foto_perfil"=> $perfil->foto_perfil,
+            "descripcion"=> $perfil->descripcion
+        ];
+
+        return response()->json($data, $perfil->wasRecentlyCreated ? 201 : 200);
+    } catch (\Exception $e) {
+        Log::error('Error al crear o actualizar el perfil: ' . $e->getMessage());
+
+        // Devolver una respuesta de error 500
+        return response()->json(['error' => 'Error interno del servidor'], 500);
+
+
         // Actualizar la descripción del perfil
         $perfil->descripcion = $request->descripcion;
         $perfil->save();
@@ -106,9 +124,55 @@ public function upsertPerfil(Request $request)
 
 
 
+    public function searchFriendship(Request $request){
 
-    public function destroy(Perfiles $perfiles)
-    {
-        //
-    }
+        try {
+            if (!Auth::check()) {
+                // Si el usuario no está autenticado, envia una respuesta 401
+                return response()->json(['error' => 'No autorizado'], 401);
+            }
+             // obtiene al usuario autenticado
+             $user = Auth::userOrFail();
+     
+             $perfiles = Perfiles::join('users', 'perfiles.id_usuario', '=', 'users.id')
+            ->select('perfiles.descripcion', 'users.nombre', 'perfiles.foto_perfil')
+            ->where('perfiles.id_usuario', '!=', $user->id)
+            ->where(function ($query) {
+                $query->where('users.visibilidad', 'amistad')
+                    ->orWhere('users.visibilidad', 'ambos');
+            })
+            ->get();
+             
+             return response()->json($perfiles, 200);
+         }  catch (\Exception $e) {
+             // Si hay un error interno del servidor, enviar una respuesta 500 con información del error
+             return response()->json(['error' => 'Error interno del servidor', 'message' => $e->getMessage()], 500);
+         }
+     }
+
+     public function searchRelationship(Request $request){
+
+        try {
+            if (!Auth::check()) {
+                // Si el usuario no está autenticado, envia una respuesta 401
+                return response()->json(['error' => 'No autorizado'], 401);
+            }
+             // obtiene al usuario autenticado
+             $user = Auth::userOrFail();
+     
+             $perfiles = Perfiles::join('users', 'perfiles.id_usuario', '=', 'users.id')
+            ->select('perfiles.descripcion', 'users.nombre', 'perfiles.foto_perfil')
+            ->where('perfiles.id_usuario', '!=', $user->id)
+            ->where(function ($query) {
+                $query->where('users.visibilidad', 'relacion')
+                    ->orWhere('users.visibilidad', 'ambos');
+            })
+            ->get();
+             
+             return response()->json($perfiles, 200);
+         }  catch (\Exception $e) {
+             // Si hay un error interno del servidor, enviar una respuesta 500 con información del error
+             return response()->json(['error' => 'Error interno del servidor', 'message' => $e->getMessage()], 500);
+         }
+     }
 }

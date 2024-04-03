@@ -38,4 +38,9 @@ Route::group([
     //cambio de path para que se centre en el perfil
     Route::post('/perfil/upsertPerfil','App\Http\Controllers\PerfilesController@upsertPerfil');
     Route::put('/perfil/actualizarPerfil','App\Http\Controllers\PerfilesController@actualizarPerfil');
+
+    //cambio de path para traer los usuarios de amistad o ambos  searchRelacion
+    Route::get('/search/friendship','App\Http\Controllers\PerfilesController@searchFriendship');
+    Route::get('/search/relationship','App\Http\Controllers\PerfilesController@searchRelationship');
+
 });
