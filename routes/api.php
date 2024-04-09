@@ -52,7 +52,7 @@ Route::group([
     'middleware' => 'api',
     'prefix' => 'Mensajes'
 
-], function ($router) {
+], function ($router) { 
 
     // Api para traer todos los mensajes de un chat especifico 
     Route::get('/MensajeChat',[ChatController::class, 'getMensajesChat']);
@@ -61,5 +61,5 @@ Route::group([
     // Api para traer todos los chats que tenemos, tanto amistad como relación
     Route::get('/ChatsAll',[ChatController::class, 'getAllChat']); 
     // Api para enviar mensajes (guardarlos en la base de datos)
-    Route::post('/EnvioMensajes',[ChatController::class, 'sendMensajes']); 
+    Route::put('/EnvioMensajes',[ChatController::class, 'sendMensajes']); 
 });
