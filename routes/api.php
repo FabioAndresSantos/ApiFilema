@@ -2,7 +2,9 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ChatController; 
+use App\Http\Controllers\ChatController;
+use App\Http\Controllers\EncuentrosController;
+use App\Http\Controllers\RestaurantesController;
 
 /*
 |--------------------------------------------------------------------------
@@ -63,3 +65,33 @@ Route::group([
     // Api para enviar mensajes (guardarlos en la base de datos)
     Route::put('/EnvioMensajes',[ChatController::class, 'sendMensajes']); 
 });
+
+// Grupo de rutas para Restaurantes 
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'Restaurantes'
+
+], function ($router) { 
+
+    // Api para traer todos los restaurantes correspondientes a la ciudad 
+    Route::get('/GetRestaurantes',[RestaurantesController::class, 'getRestaurantes']);
+
+    // Api para traer todos los restaurantes correspondientes a un centro comercial de la ciudad 
+    Route::get('/GetRestaurantesCC',[RestaurantesController::class, 'getRestaurantesCC']);
+
+});
+
+// Grupo de rutas para Encuentros/Invitaciones  
+Route::group([
+
+    'middleware' => 'api',
+    'prefix' => 'Encuentro'
+
+], function ($router) { 
+
+    //Api para crear y enviar invitacion (insersión encuentro y mensaje)  
+    Route::put('/GetEncuentro',[EncuentrosController::class, 'getInvitacion']);
+
+});
+

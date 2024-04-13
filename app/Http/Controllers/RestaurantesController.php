@@ -4,62 +4,78 @@ namespace App\Http\Controllers;
 
 use App\Models\restaurantes;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth; 
+use Illuminate\Support\Facades\DB; 
 
 class RestaurantesController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
-    {
-        //
+     //Función para traer todos los restaurantes de una ciudad 
+    public function getRestaurantes(Request $request){
+        
+        try {
+            // Verificar si el usuario está autenticado
+            if (!Auth::check()) {
+                // Si el usuario no está autenticado, enviar una respuesta 401
+                return response()->json(['error' => 'No autorizado'], 401);
+            }
+
+            // Obtener al usuario autenticado
+            $user = Auth::userOrFail();
+            
+            // Ejecutar la consulta aplicando los filtros de ciudad, centro comercial
+            $restaurante = DB::table('restaurantes')
+            
+            ->select('restaurantes.id','restaurantes.nombre')
+                ->join ('lugar_encuentros','restaurantes.id', '=', 'lugar_encuentros.id_restaurante')
+                ->join ('centros_comerciales','lugar_encuentros.id_centro_comercial', '=', 'centros_comerciales.id')
+                ->where('centros_comerciales.ciudad_id', $user-> ciudad_id )
+                ->groupBy('restaurantes.id','restaurantes.nombre') 
+            ->get();
+
+            // Retornar los datos filtrados
+            return response()->json($restaurante, 200);
+
+        } catch (\Exception $e) {
+
+            // Si hay un error interno del servidor, enviar una respuesta 500 con información del error
+            return response()->json(['error' => 'Error interno del servidor', 'message' => $e->getMessage()], 500);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    //Función para traer todos los restaurantes asociados a un centro comercial
+    public function getRestaurantesCC(Request $request){
+        
+        try {
+            // Verificar si el usuario está autenticado
+            if (!Auth::check()) {
+                // Si el usuario no está autenticado, enviar una respuesta 401
+                return response()->json(['error' => 'No autorizado'], 401);
+            }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
+            // Obtener al usuario autenticado
+            $user = Auth::userOrFail();
+            
+            $restaurante_cc = $request->header('id');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(restaurantes $restaurantes)
-    {
-        //
-    }
+            // Ejecutar la consulta aplicando los filtros del restaurante  asociado al centro comercial
+            $restaurante = DB::table('restaurantes')
+            
+            ->select('centros_comerciales.id','centros_comerciales.nombre')
+                ->join ('lugar_encuentros','restaurantes.id', '=', 'lugar_encuentros.id_restaurante')
+                ->join ('centros_comerciales','lugar_encuentros.id_centro_comercial', '=', 'centros_comerciales.id')
+                ->where('centros_comerciales.ciudad_id', $user-> ciudad_id )
+                ->where('restaurantes.id',$restaurante_cc)
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(restaurantes $restaurantes)
-    {
-        //
-    }
+            ->get();
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, restaurantes $restaurantes)
-    {
-        //
-    }
+            // Retornar los datos filtrados
+            return response()->json($restaurante, 200);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(restaurantes $restaurantes)
-    {
-        //
+        } catch (\Exception $e) {
+
+            // Si hay un error interno del servidor, enviar una respuesta 500 con información del error
+            return response()->json(['error' => 'Error interno del servidor', 'message' => $e->getMessage()], 500);
+        }
     }
 }
+

@@ -18,6 +18,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_usuario_solicitado');
             $table->foreign('id_usuario_solicitado')->references('id')->on('users');
             $table->dateTime('fecha_hora_encuentro');
+            $table->unsignedBigInteger('id_lugar_encuentro');
+            $table->foreign('id_lugar_encuentro')->references('id')->on('lugar_encuentros');
             $table->boolean('aceptado')->default(false);
             $table->timestamps();
         });

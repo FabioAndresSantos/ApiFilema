@@ -197,7 +197,9 @@ class ChatController extends Controller{
                 'mensaje'=>$mensaje,
                 'chat'=>$id_chat
             ]); 
-        
+            
+            return response()->json(['success' =>'Mensaje enviado'], 200); 
+            
         } catch (\Exception $e) {
 
             // Si hay un error interno del servidor, enviar una respuesta 500 con información del error
