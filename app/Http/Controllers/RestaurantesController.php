@@ -25,11 +25,11 @@ class RestaurantesController extends Controller
             // Ejecutar la consulta aplicando los filtros de ciudad, centro comercial
             $restaurante = DB::table('restaurantes')
             
-            ->select('restaurantes.id','restaurantes.nombre')
+            ->select('restaurantes.id','restaurantes.nombre', 'restaurantes.imagen')
                 ->join ('lugar_encuentros','restaurantes.id', '=', 'lugar_encuentros.id_restaurante')
                 ->join ('centros_comerciales','lugar_encuentros.id_centro_comercial', '=', 'centros_comerciales.id')
                 ->where('centros_comerciales.ciudad_id', $user-> ciudad_id )
-                ->groupBy('restaurantes.id','restaurantes.nombre') 
+                ->groupBy('restaurantes.id','restaurantes.nombre','restaurantes.imagen') 
             ->get();
 
             // Retornar los datos filtrados

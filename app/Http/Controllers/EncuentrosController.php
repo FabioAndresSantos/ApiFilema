@@ -10,7 +10,7 @@ use App\Http\Controllers\ChatController;
 
 class EncuentrosController extends Controller
 {
-     //Función para traer todos los restaurantes de una ciudad 
+     //Función para enviar mensaje de invitación  a un chat con diversas conexiones 
      public function getInvitacion(Request $request){
         
         try {

@@ -5,7 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EncuentrosController;
 use App\Http\Controllers\RestaurantesController;
-
+use App\config\cors; 
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -51,15 +51,13 @@ Route::group([
 // Grupo de rutas para Mensajes
 Route::group([
 
-    'middleware' => 'api',
+    'middleware' => ['cors'],
     'prefix' => 'Mensajes'
 
 ], function ($router) { 
 
     // Api para traer todos los mensajes de un chat especifico 
     Route::get('/MensajeChat',[ChatController::class, 'getMensajesChat']);
-    // Api para traer los chats dependiendo de su tipo (Amistad o Relación)
-    Route::get('/Chats',[ChatController::class, 'getChat']);
     // Api para traer todos los chats que tenemos, tanto amistad como relación
     Route::get('/ChatsAll',[ChatController::class, 'getAllChat']); 
     // Api para enviar mensajes (guardarlos en la base de datos)
@@ -69,7 +67,7 @@ Route::group([
 // Grupo de rutas para Restaurantes 
 Route::group([
 
-    'middleware' => 'api',
+    'middleware' => ['cors'],
     'prefix' => 'Restaurantes'
 
 ], function ($router) { 
@@ -85,7 +83,7 @@ Route::group([
 // Grupo de rutas para Encuentros/Invitaciones  
 Route::group([
 
-    'middleware' => 'api',
+    'middleware' => ['cors'],
     'prefix' => 'Encuentro'
 
 ], function ($router) { 
