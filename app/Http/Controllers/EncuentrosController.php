@@ -7,10 +7,11 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth; 
 use Illuminate\Support\Facades\DB; 
 use App\Http\Controllers\ChatController;
+use Carbon\Carbon;
 
 class EncuentrosController extends Controller
 {
-     //Función para enviar mensaje de invitación  a un chat con diversas conexiones 
+     //Función para traer todos los restaurantes de una ciudad 
      public function getInvitacion(Request $request){
         
         try {
@@ -27,14 +28,22 @@ class EncuentrosController extends Controller
             $id_usuario_solicitado = $request->header('id_usuario_solicitado');
             $fecha_encuentro = $request->header('fecha'); 
             $hora_encuentro = $request->header('hora');
-            $lugar = $request->header('lugar'); 
+            $centro = $request->header('centro');
+            $rest = $request->header('rest');
             $id_chat = $request->header('id_chat');
-            $fecha_encuentro = $fecha_encuentro.' '.$hora_encuentro; 
+            $fecha_encuentro1 = $fecha_encuentro.' '.$hora_encuentro; 
+            $fecha_encuentro1 = Carbon::createFromFormat('Y-m-d H:i', $fecha_encuentro1);
+
+            $lugar = DB::table('lugar_encuentros')
+                    ->select('id')
+                    ->where('id_centro_comercial',"=",$centro)
+                    ->where('id_restaurante',"=",$rest)
+                    ->get();
 
             // Retornamos el id de el encuentro insertado
-            $encuentro = $this->getInvitacion3($user->id, $id_usuario_solicitado, $fecha_encuentro, $lugar); 
+            $encuentro = $this->getInvitacion3($user->id, $id_usuario_solicitado, $fecha_encuentro1, $lugar[0]->id); 
             
-                $invitacion = $this->getInvitacion1($encuentro);
+            $invitacion = $this->getInvitacion1($encuentro);
 
                 //Se crea el mensaje para enviarlo en el mismo chat
                 foreach ($invitacion as $invitaciones) {
