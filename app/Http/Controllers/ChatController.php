@@ -86,7 +86,7 @@ class ChatController extends Controller{
                 $mensajes = [];
                 foreach ($chat as $chats) {
                     $ultimoMensaje = DB::table('mensajes')
-                        ->select('mensajes.fechaHoraMensaje','chats.tipoChat','mensajes.remitente_id','mensajes.chat','mensajes.id','mensajes.mensaje', 'mensajes.visto', DB::raw('CASE WHEN chats.usuario1_id = ' . $user->id . ' THEN u2.nombre ELSE u1.nombre END AS nombre_usuario'), DB::raw('CASE WHEN chats.usuario1_id = ' . $user->id. ' THEN perfil2.foto_perfil ELSE perfil1.foto_perfil END AS foto'), DB::raw('CASE WHEN chats.usuario1_id = ' . $user->id. ' THEN u2.id ELSE u1.id END AS id_persona'))
+                        ->select('mensajes.fechaHoraMensaje AS hora','chats.tipoChat','mensajes.remitente_id','mensajes.chat','mensajes.id','mensajes.mensaje', 'mensajes.visto', DB::raw('CASE WHEN chats.usuario1_id = ' . $user->id . ' THEN u2.nombre ELSE u1.nombre END AS nombre_usuario'), DB::raw('CASE WHEN chats.usuario1_id = ' . $user->id. ' THEN perfil2.foto_perfil ELSE perfil1.foto_perfil END AS foto'), DB::raw('CASE WHEN chats.usuario1_id = ' . $user->id. ' THEN u2.id ELSE u1.id END AS id_persona'))
                         ->join('chats', 'mensajes.chat', '=', 'chats.id')
                         ->join('users as u1', 'chats.usuario1_id', '=', 'u1.id')
                         ->join('users as u2', 'chats.usuario2_id', '=', 'u2.id')
@@ -101,6 +101,8 @@ class ChatController extends Controller{
                     // Verificar si el remitente del mensaje es el usuario autenticado
                     if ($ultimoMensaje) {
 
+                        $ultimoMensaje->hora = date("H:i:s", strtotime($ultimoMensaje->hora));
+
                         // Agregar el mensaje al array de mensajes con el remitente indicado
                         $mensajes[] = [
                             "chat"=>$ultimoMensaje->chat,
@@ -111,8 +113,8 @@ class ChatController extends Controller{
                             "remitente"=>$ultimoMensaje->remitente_id == $user->id ? True : False,
                             "nombre_destinatario"=>$ultimoMensaje->nombre_usuario,
                             "foto" => $ultimoMensaje->foto, 
-                            "fecha_hora_mensaje" => $ultimoMensaje->fechaHoraMensaje,
-                            "id_persona"=>$ultimoMensaje->id_persona
+                            "id_persona"=>$ultimoMensaje->id_persona,
+                            "hora" => $ultimoMensaje-> hora
                         ];
                     }
                 }

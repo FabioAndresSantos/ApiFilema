@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\EncuentrosController;
 use App\Http\Controllers\RestaurantesController;
+use App\Http\Controllers\LugarEncuentrosController;
 use App\config\cors; 
 /*
 |--------------------------------------------------------------------------
@@ -90,6 +91,9 @@ Route::group([
 
     //Api para crear y enviar invitacion (insersión encuentro y mensaje)  
     Route::put('/GetEncuentro',[EncuentrosController::class, 'getInvitacion']);
+
+    //Api para actualizar base de datos respecto a la invitación aceptada o rechazada
+    Route::put('/UpdateInvitation',[LugarEncuentrosController::class, 'updateInvitation']); 
 
 });
 
