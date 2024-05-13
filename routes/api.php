@@ -63,6 +63,9 @@ Route::group([
     Route::get('/ChatsAll',[ChatController::class, 'getAllChat']); 
     // Api para enviar mensajes (guardarlos en la base de datos)
     Route::put('/EnvioMensajes',[ChatController::class, 'sendMensajes']); 
+
+    //Api para crear el chat a partir del match
+    Route:: put('/CrearChat',[ChatController::class, 'matchChat']); 
 });
 
 // Grupo de rutas para Restaurantes 

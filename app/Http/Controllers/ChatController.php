@@ -162,5 +162,43 @@ class ChatController extends Controller{
             return response()->json(['error' => 'Error interno del servidor', 'message' => $e->getMessage()], 500);
         }
     }
+
+    public function matchChat(Request $request){
+        try {
+            // Verificar si el usuario está autenticado
+            if (!Auth::check()) {
+                // Si el usuario no está autenticado, enviar una respuesta 401
+                return response()->json(['error' => 'No autorizado'], 401);
+            }
+
+            // Intentar obtener al usuario autenticado
+            $user = Auth::userOrFail();
+
+            $id_match = $request->header('id');
+            $Tipo_chat = $request->header('tipoChat');
+            $Match = DB::table('matches')
+            ->select()
+                ->where('matches.id', $id_match)
+                ->get(); 
+
+            foreach ($Match as $matches) {
+                if ($matches -> estado == 'Aceptado'){
+
+                    // Sentencia de insersión de chat
+                    DB::table('chats')->insert([
+                        'tipoChat'=>$Tipo_chat, 
+                        'usuario1_id'=> $matches -> id_usuario_solicitante,
+                        'usuario2_id'=> $matches -> id_usuario_solicitado,
+                    ]); 
+                }
+            }
+
+            return response()->json(['success' =>'Chat creado'], 200); 
+        }  catch (\Exception $e) {
+
+            // Si hay un error interno del servidor, enviar una respuesta 500 con información del error
+            return response()->json(['error' => 'Error interno del servidor', 'message' => $e->getMessage()], 500);
+        }
+    }
 }
 
